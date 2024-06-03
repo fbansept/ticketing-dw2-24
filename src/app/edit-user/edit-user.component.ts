@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
@@ -20,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
+    HttpClientModule,
   ],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.scss',
@@ -37,9 +39,20 @@ export class EditUserComponent {
     role: ['Etudiant', [Validators.required]],
   });
 
+  http: HttpClient = inject(HttpClient);
+
   onSubmit() {
     if (this.formulaire.valid) {
-      console.log('OK');
+      this.http
+        .post(
+          'http://localhost/backend-angular-ticket-dw2-24/add-user.php',
+          this.formulaire.value
+        )
+        .subscribe({
+          next: (resultat) => console.log(resultat),
+          error: (resultat) =>
+            alert('Erreur inconnue contactez votre administrateur'),
+        });
     }
   }
 }

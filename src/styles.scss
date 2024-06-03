@@ -9,3 +9,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     max-width: 500px;
     margin: 0 auto;
 }
+
+.mat-mdc-snack-bar-container {
+
+    &.valid .mdc-snackbar__surface {
+        background-color: rgb(129, 255, 158);
+    }
+
+    &.error .mdc-snackbar__surface {
+        background-color: rgb(254, 123, 123);
+    }
+
+}
+
+
