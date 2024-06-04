@@ -35,35 +35,51 @@ export class ManageUserComponent {
   }
 
   refresh() {
-    this.http
-      .get<Utilisateur[]>(
-        'http://localhost/backend-angular-ticket-dw2-24/list-user.php'
-      )
-      .subscribe((resultat) => (this.listeUtilisateur = resultat));
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt != null) {
+      this.http
+        .get<Utilisateur[]>(
+          'http://localhost/backend-angular-ticket-dw2-24/list-user.php',
+          { headers: { Authorization: jwt } }
+        )
+        .subscribe((resultat) => (this.listeUtilisateur = resultat));
+    }
   }
 
   onSuppressionUtilisateur(idUtilisateur: number) {
-    this.http
-      .delete(
-        'http://localhost/backend-angular-ticket-dw2-24/delete-user.php?id=' +
-          idUtilisateur
-      )
-      .subscribe({
-        next: (resultat) => {
-          this.refresh();
-          this.snackBar.open("L'utilisateur a bien été supprimé", undefined, {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: 'valid'
-          });
-        },
-        error: (resultat) => this.snackBar.open("Erreur inconnue, contactez votre administrateur", undefined, {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: 'error'
-          }),
-      });
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt != null) {
+
+      this.http
+        .delete(
+          'http://localhost/backend-angular-ticket-dw2-24/delete-user.php?id=' +
+            idUtilisateur,
+          { headers: { Authorization: jwt } }
+        )
+        .subscribe({
+          next: (resultat) => {
+            this.refresh();
+            this.snackBar.open("L'utilisateur a bien été supprimé", undefined, {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: 'valid',
+            });
+          },
+          error: (resultat) =>
+            this.snackBar.open(
+              'Erreur inconnue, contactez votre administrateur',
+              undefined,
+              {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: 'error',
+              }
+            ),
+        });
+    }
   }
 }
