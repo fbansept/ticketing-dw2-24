@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthentificationService } from '../authentification.service';
 
 @Component({
   selector: 'app-manage-user',
@@ -25,13 +26,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ManageUserComponent {
   http: HttpClient = inject(HttpClient);
-
   snackBar: MatSnackBar = inject(MatSnackBar);
+  authentification: AuthentificationService = inject(AuthentificationService);
 
   listeUtilisateur: Utilisateur[] = [];
 
   ngOnInit() {
     this.refresh();
+
   }
 
   refresh() {
@@ -51,7 +53,6 @@ export class ManageUserComponent {
     const jwt = localStorage.getItem('jwt');
 
     if (jwt != null) {
-
       this.http
         .delete(
           'http://localhost/backend-angular-ticket-dw2-24/delete-user.php?id=' +
