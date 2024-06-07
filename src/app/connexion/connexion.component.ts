@@ -35,7 +35,6 @@ export class ConnexionComponent {
 
   formulaire: FormGroup = this.generateurFormulaire.group({
     email: ['', [Validators.required, Validators.email]],
-
     password: ['', [Validators.required]],
   });
 

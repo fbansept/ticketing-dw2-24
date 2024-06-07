@@ -16,7 +16,7 @@ import { AuthentificationService } from '../authentification.service';
   imports: [
     MatButtonModule,
     RouterLink,
-    HttpClientModule,
+    //HttpClientModule,
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
@@ -37,27 +37,23 @@ export class ManageUserComponent {
   }
 
   refresh() {
-    const jwt = localStorage.getItem('jwt');
 
-    if (jwt != null) {
       this.http
         .get<Utilisateur[]>(
-          'http://localhost/backend-angular-ticket-dw2-24/list-user.php',
-          { headers: { Authorization: jwt } }
+          'http://localhost/backend-angular-ticket-dw2-24/list-user.php'
         )
         .subscribe((resultat) => (this.listeUtilisateur = resultat));
-    }
+    
   }
 
   onSuppressionUtilisateur(idUtilisateur: number) {
-    const jwt = localStorage.getItem('jwt');
+    
 
-    if (jwt != null) {
+ 
       this.http
         .delete(
           'http://localhost/backend-angular-ticket-dw2-24/delete-user.php?id=' +
-            idUtilisateur,
-          { headers: { Authorization: jwt } }
+            idUtilisateur
         )
         .subscribe({
           next: (resultat) => {
@@ -81,6 +77,6 @@ export class ManageUserComponent {
               }
             ),
         });
-    }
+    
   }
 }

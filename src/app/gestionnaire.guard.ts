@@ -1,18 +1,21 @@
 import { inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthentificationService } from './authentification.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
-export const administrateurGuard: CanActivateFn = (route, state) => {
+export const gestionnaireGuard: CanActivateFn = (route, state) => {
   const authentification = inject(AuthentificationService);
   const router = inject(Router);
   const snackBar: MatSnackBar = inject(MatSnackBar);
 
-  if (authentification.role == 'Administrateur') {
+  if (
+    authentification.role == 'Administrateur' ||
+    authentification.role == 'Gestionnaire'
+  ) {
     return true;
   } else {
     snackBar.open(
-      "Vous ne pouvez pas accéder à cette page, veuillez vous connecter avec un compte d'administrateur",
+      "Vous ne pouvez pas accéder à cette page, veuillez vous connecter avec un compte d'administrateur ou gestionnaire",
       undefined,
       {
         duration: 10000,

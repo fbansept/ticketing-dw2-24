@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
@@ -24,7 +24,7 @@ import { Utilisateur } from '../models/Utilisateur.type';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    HttpClientModule,
+    //HttpClientModule,
   ],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.scss',
@@ -62,24 +62,19 @@ export class EditUserComponent {
           role: ['Etudiant', [Validators.required]],
         });
 
-        const jwt = localStorage.getItem('jwt');
-
-        if (jwt != null) {
-          this.http
-            .get<Utilisateur>(
-              'http://localhost/backend-angular-ticket-dw2-24/get-user.php?id=' +
-                parametresUrl['id'],
-              { headers: { Authorization: jwt } }
-            )
-            .subscribe({
-              next: (user: Utilisateur) => {
-                this.formulaire.patchValue(user);
-                this.idUtilisateur = user.id;
-              },
-              error: () =>
-                alert('Erreur inconnue contactez votre administrateur'),
-            });
-        }
+        this.http
+          .get<Utilisateur>(
+            'http://localhost/backend-angular-ticket-dw2-24/get-user.php?id=' +
+              parametresUrl['id']
+          )
+          .subscribe({
+            next: (user: Utilisateur) => {
+              this.formulaire.patchValue(user);
+              this.idUtilisateur = user.id;
+            },
+            error: () =>
+              alert('Erreur inconnue contactez votre administrateur'),
+          });
       } else {
         this.formulaire = this.formBuilder.group({
           email: ['', [Validators.required, Validators.email]],
@@ -100,26 +95,20 @@ export class EditUserComponent {
           : 'http://localhost/backend-angular-ticket-dw2-24/edit-user.php?id=' +
             this.idUtilisateur;
 
-      const jwt = localStorage.getItem('jwt');
-
-      if (jwt != null) {
-        this.http
-          .post(url, this.formulaire.value, { headers: { Authorization: jwt } })
-          .subscribe({
-            next: (resultat) => {
-              this.snackBar.open("L'utilisateur a bien été ajouté", undefined, {
-                duration: 3000,
-                horizontalPosition: 'center',
-                verticalPosition: 'top',
-                panelClass: 'valid',
-              });
-
-              this.router.navigateByUrl('/manage-user');
-            },
-            error: (resultat) =>
-              alert('Erreur inconnue contactez votre administrateur'),
+      this.http.post(url, this.formulaire.value).subscribe({
+        next: (resultat) => {
+          this.snackBar.open("L'utilisateur a bien été ajouté", undefined, {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: 'valid',
           });
-      }
+
+          this.router.navigateByUrl('/manage-user');
+        },
+        error: (resultat) =>
+          alert('Erreur inconnue contactez votre administrateur'),
+      });
     }
   }
 }
